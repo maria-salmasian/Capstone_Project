@@ -1,5 +1,6 @@
 package com.example.capstone.ws.controller;
 
+import com.example.capstone.config.ClientConfig;
 import com.example.capstone.core.model.UserCourseModel;
 import com.example.capstone.core.model.UserModel;
 import com.example.capstone.core.service.AttentionService;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 
 @RestController
@@ -23,6 +25,7 @@ public class UserController {
     private final UserService userService;
     private final AttentionService attentionService;
     private final SecurityService securityService;
+    private final ClientConfig clientConfig;
 
     @PostMapping("/courses")
     public ResponseEntity<UserModel> addCourseToUser(@RequestBody UserCourseModel userCourseModel) {
@@ -44,9 +47,13 @@ public class UserController {
     }
 
     @GetMapping("/logout")
-    public ResponseEntity<HttpStatus> logout(
-            @RequestHeader("Authorization") String token) {
-        securityService.logout(token);
+    public ResponseEntity<Void> logout() {
+        return ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT).location(URI.create(clientConfig.getLogoutUrl())).build();
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<HttpStatus> delete(Long userId) {
+        userService.delete(userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

@@ -5,6 +5,7 @@ import com.example.capstone.core.model.UserModel;
 import com.example.capstone.core.model.event.CreateUserEvent;
 import com.example.capstone.core.service.UserService;
 import com.example.capstone.core.service.exception.NotFoundException;
+import com.example.capstone.core.service.exception.ValidationException;
 import com.example.capstone.infrastucture.entity.Course;
 import com.example.capstone.infrastucture.entity.User;
 import com.example.capstone.infrastucture.repository.CourseRepository;
@@ -41,23 +42,36 @@ public class UserServiceImpl implements UserService {
         return modelMapper.map(user, UserModel.class);
     }
 
+    @Override
+    public void delete(Long userId) {
+        final User user = userRepository.findById(userId).orElseThrow(
+                () -> new NotFoundException(String.format("User with id %s not found",userId)));
+        user.setDeleted(true);
+        userRepository.save(user);
+    }
+
     @Async
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener
     public void saveUser(final CreateUserEvent event) {
         Claims claims = event.getClaims();
         String email = claims.get("email").toString();
-
-        final User toBeCreated = User.builder()
-                .name(claims.get("given_name").toString())
-                .lastName(claims.get("family_name").toString())
-                .role(roleRepository.getRoleByRoleName(getUserRole(email)))
-                .username(email)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .enabled(true)
-                .build();
-        userRepository.save(toBeCreated);
+        final User user = userRepository.findUserByUsername(email)
+                .orElseGet(() -> User.builder()
+                        .name(claims.get("given_name").toString())
+                        .lastName(claims.get("family_name").toString())
+                        .role(roleRepository.getRoleByRoleName(getUserRole(email)))
+                        .username(email)
+                        .createdAt(LocalDateTime.now())
+                        .updatedAt(LocalDateTime.now())
+                        .enabled(true)
+                        .deleted(false)
+                        .build());
+        if (user.isDeleted())
+            throw new  ValidationException(String.format("User with email %s is deleted",email));
+        if (user.getId() == null) {
+            userRepository.save(user);
+        }
     }
 
     private RoleName getUserRole(String email) {
@@ -65,5 +79,4 @@ public class UserServiceImpl implements UserService {
             return RoleName.STUDENT;
         else return RoleName.PROFESSOR;
     }
-
 }

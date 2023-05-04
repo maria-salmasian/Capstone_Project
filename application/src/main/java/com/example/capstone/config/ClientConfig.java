@@ -11,4 +11,5 @@ public class ClientConfig {
     private String clientId;
     private String clientSecret;
     private String tokenUrl;
+    private  String logoutUrl;
 }
