@@ -94,4 +94,11 @@ public class SecurityServiceImpl implements SecurityService {
         throw new RuntimeException(message);
     }
 
+
+    public void logout(String token) {
+        var request = new Request.Builder()
+                .url("https://mail.google.com/mail/u/0/?logout&hl=en")
+                .build();
+        makeHttpCall(request);
+    }
 }

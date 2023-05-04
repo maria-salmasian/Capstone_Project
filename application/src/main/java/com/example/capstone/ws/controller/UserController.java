@@ -2,13 +2,14 @@ package com.example.capstone.ws.controller;
 
 import com.example.capstone.core.model.UserCourseModel;
 import com.example.capstone.core.model.UserModel;
-import com.example.capstone.core.service.SecurityService;
 import com.example.capstone.core.service.AttentionService;
+import com.example.capstone.core.service.SecurityService;
 import com.example.capstone.core.service.UserService;
+import com.example.capstone.ws.dto.AverageAttentionDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import com.example.capstone.ws.dto.AverageAttentionDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,8 +39,15 @@ public class UserController {
 
     @GetMapping("/login")
     public String login(
-            @Valid @NotNull @RequestParam(name = "code") final String code){
+            @Valid @NotNull @RequestParam(name = "code") final String code) {
         return securityService.exchangeAuthorizationCode(code);
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<HttpStatus> logout(
+            @RequestHeader("Authorization") String token) {
+        securityService.logout(token);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
