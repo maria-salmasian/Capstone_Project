@@ -23,4 +23,7 @@ public class Attention {
 
     @Column(name = "angle")
     private float angle;
+
+    @ManyToOne
+    private Course course;
 }

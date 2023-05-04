@@ -12,6 +12,7 @@ import java.util.Set;
 @Table(name = "cluster", schema = "face_recognition")
 @EqualsAndHashCode(of = {"id", "name"})
 public class Cluster {
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
