@@ -2,16 +2,23 @@ package com.example.capstone.core.service.impl;
 
 import com.example.capstone.core.model.UserCourseModel;
 import com.example.capstone.core.model.UserModel;
+import com.example.capstone.core.model.event.CreateUserEvent;
 import com.example.capstone.core.service.UserService;
 import com.example.capstone.core.service.exception.NotFoundException;
 import com.example.capstone.infrastucture.entity.Course;
 import com.example.capstone.infrastucture.entity.User;
 import com.example.capstone.infrastucture.repository.CourseRepository;
 import com.example.capstone.infrastucture.repository.UserRepository;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionalEventListener;
+
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -30,5 +37,14 @@ public class UserServiceImpl implements UserService {
         user.addCourse(course);
         return modelMapper.map(user, UserModel.class);
     }
+
+    @Transactional
+    @EventListener
+    @TransactionalEventListener(CreateUserEvent.class)
+    public void saveUser(final CreateUserEvent event) {
+        Claims claims = event.getClaims();
+
+    }
+
 
 }
