@@ -1,14 +1,17 @@
 package com.example.capstone.infrastucture.entity;
 
+import io.micrometer.common.lang.Nullable;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "user", schema = "face_recognition")
 public class User {
 
@@ -35,7 +38,7 @@ public class User {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToOne
+    @ManyToOne
     private Role role;
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})

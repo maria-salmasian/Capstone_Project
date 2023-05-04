@@ -75,11 +75,13 @@ public class SecurityServiceImpl implements SecurityService {
             throw new IllegalStateException(e.getMessage(), e);
         }
     }
+
     private Map<String, Object> handleSuccessfulResponse(@NotNull final Response response) {
         try {
             final var responseBody = Objects.requireNonNull(response.peekBody(Long.MAX_VALUE)).string();
 
-            final var typeRef = new TypeReference<Map<String, Object>>() {};
+            final var typeRef = new TypeReference<Map<String, Object>>() {
+            };
 
             return this.objectMapper.readValue(responseBody, typeRef);
         } catch (final IOException e) {
