@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -58,7 +60,9 @@ public class SecurityServiceImpl implements SecurityService {
     }
 
 
-    private static Claims getClaims(final String token) {
+
+
+    public static Claims getClaims(final String token) {
         final int signatureStartIndex = token.lastIndexOf('.') + 1;
         final String withoutSignature = token.substring(0, signatureStartIndex);
         return Jwts.parser().parseClaimsJwt(withoutSignature).getBody();
