@@ -7,7 +7,7 @@ function FaceDetection() {
 
     const startFaceDetection = () => {
         setStatus("Starting face detection...");
-        axios.post(`http://localhost:5001//face_detection/${userId}`)
+        axios.post(`http://localhost:5001/face_detection/${userId}`)
             .then((response) => {
                 setStatus(response.data.message);
             })
