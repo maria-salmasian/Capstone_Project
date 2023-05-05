@@ -9,7 +9,7 @@ from flask import Flask, jsonify
 app = Flask(__name__)
 
 # Connect to PostgreSQL database
-conn = psycopg2.connect(database="postgres", user="postgres", password="12345", host="localhost", port="5432")
+conn = psycopg2.connect(database="postgres", user="postgres", password={}, host="localhost", port="5432")
 cur = conn.cursor()
 
 
@@ -22,10 +22,9 @@ landmark_detector.loadModel("lbfmodel.yml")
 
 
 
-# Define the HTTP GET method
-# Define the HTTP GET method
-@app.route('/face_detection/<userId>', methods=['POST'])
-def face_detection(userId):
+# Define the HTTP POST method
+@app.route('/face_detection/<userId>/<courseId>', methods=['POST'])
+def face_detection(userId, courseId):
     # Start the camera
     cap = cv2.VideoCapture(0)
 
@@ -57,17 +56,17 @@ def face_detection(userId):
 
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-            plt.imshow(frame)
-            plt.show(block=False)
-            plt.pause(0.01)
-            plt.clf()
+            # plt.imshow(frame)
+            # plt.show(block=False)
+            # plt.pause(0.01)
+            # plt.clf()
 
 
             # Check if the face is not straight
             if percent_not_straight > 10.0:
                 # Insert the percentage into the database
-                cur.execute("INSERT INTO face_recognition.attention (date, user, angle) VALUES (%s)", (
-                    datetime.now(), userId, percent_not_straight))
+                cur.execute("INSERT INTO face_recognition.attention (date, user_id, angle, course_id) VALUES (%s, %s, %s, %s)", (
+                    datetime.now(), userId, float(percent_not_straight), courseId))
                 conn.commit()
 
         # Press 'q' to quit
