@@ -9,7 +9,7 @@ from flask import Flask, jsonify
 app = Flask(__name__)
 
 # Connect to PostgreSQL database
-conn = psycopg2.connect(database="postgres", user="postgres", password="2288", host="localhost", port="5432")
+conn = psycopg2.connect(database="postgres", user="postgres", password="12345", host="localhost", port="5432")
 cur = conn.cursor()
 
 
