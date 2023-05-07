@@ -55,8 +55,8 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT).location(URI.create(clientConfig.getLogoutUrl())).build();
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<HttpStatus> delete(@IsAuthenticated @Valid @RequestHeader("Authorization") String token, Long userId) {
+    @DeleteMapping("/delete/{userId}")
+    public ResponseEntity<HttpStatus> delete(@IsAuthenticated @Valid @RequestHeader("Authorization") String token, @PathVariable Long userId) {
         userService.delete(userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }

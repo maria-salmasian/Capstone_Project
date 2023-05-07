@@ -54,9 +54,18 @@ public class CourseServiceImpl implements CourseService {
     }
 
     public List<CourseModel> getCourses(Pageable pageable) {
-        return courseRepository.findAllByDeletedFalse(pageable)
+        return courseRepository.findAllByIsDeletedFalse(pageable)
                 .stream()
                 .map(c -> modelMapper.map(c, CourseModel.class))
                 .toList();
     }
+
+
+    public List<CourseModel> getCoursesByUserAndClusterName(Pageable pageable, Long userId, String clusterName){
+        return courseRepository.findCourseByUsersIdEqualsAndClustersNameLike(pageable, userId, clusterName+'%')
+                .stream()
+                .map(c -> modelMapper.map(c, CourseModel.class))
+                .toList();
+    }
+
 }

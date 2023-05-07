@@ -15,5 +15,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     Optional<Course> findByIdAndIsDeletedFalse(Long id);
 
-    Page<Course> findAllByDeletedFalse(Pageable pageable);
+    Page<Course> findAllByIsDeletedFalse(Pageable pageable);
+
+    Page<Course> findCourseByUsersIdEqualsAndClustersNameLike(Pageable pageable, Long userId, String clusterName);
 }

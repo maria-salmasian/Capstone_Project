@@ -8,11 +8,13 @@ import com.example.capstone.ws.dto.AverageAttentionDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -46,7 +48,13 @@ public class CourseController {
     }
 
     @GetMapping("/{courseId}/attention-average")
-    public ResponseEntity<AverageAttentionDto> getAverageByCourse(@IsAuthenticated @Valid @RequestHeader("Authorization") String token, @PathVariable Long courseId, @RequestParam LocalDateTime date) {
-        return ResponseEntity.ok().body(attentionService.getAverageByCourseAndDate(courseId, date));
+    public ResponseEntity<AverageAttentionDto> getAverageByCourse(@IsAuthenticated @Valid @RequestHeader("Authorization") String token, @PathVariable Long courseId, @RequestParam String  date) {
+        return ResponseEntity.ok().body(attentionService.getAverageByCourseAndDate(courseId, LocalDateTime.parse(date, DateTimeFormatter.ISO_LOCAL_DATE_TIME)));
     }
+
+    @GetMapping("/users/{userId}/cluster/{clusterName}")
+    public ResponseEntity<List<CourseModel>> getCoursesByUserIDAndCluster(@IsAuthenticated @Valid @RequestHeader("Authorization") String token, Pageable pageable, @PathVariable Long userId, @PathVariable String clusterName) {
+        return ResponseEntity.ok().body(courseService.getCoursesByUserAndClusterName(pageable, userId, clusterName));
+    }
+
 }
