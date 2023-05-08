@@ -30,7 +30,8 @@ Tables:
     link_course_user
                          
                          
-![diagram](https://user-images.githubusercontent.com/67556986/99569478-1d901500-29ea-11eb-98fc-cbc6adf0dff1.png)
+![diagram](![face_recognition](https://user-images.githubusercontent.com/104355435/236812250-6198b425-9113-4fe2-9cf6-21a7ee35e8e7.png)
+
                                               
                          
                          
