@@ -45,7 +45,7 @@ Postman
 - Spring security                         
 - Unit tests                         
                          
-# Package structure                         
+# Package structure for the API                        
                          
 ws: sub packages : controller , dto , exception, converter                        
 core: sub packages : model, service, serviceImpl                         
