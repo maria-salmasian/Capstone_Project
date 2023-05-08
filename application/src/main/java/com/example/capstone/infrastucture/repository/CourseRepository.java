@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -17,5 +18,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     Page<Course> findAllByIsDeletedFalse(Pageable pageable);
 
+    List<Course> findAllByIsDeletedFalseAndUsersIdEquals(Long userId);
     Page<Course> findCourseByUsersIdEqualsAndClustersNameLike(Pageable pageable, Long userId, String clusterName);
 }

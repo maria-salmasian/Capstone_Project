@@ -3,6 +3,7 @@ package com.example.capstone.core.service.impl;
 import com.example.capstone.config.ClientConfig;
 import com.example.capstone.core.model.event.CreateUserEvent;
 import com.example.capstone.core.service.SecurityService;
+import com.example.capstone.ws.dto.TokenDto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
@@ -22,6 +23,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.example.capstone.core.service.impl.UserServiceImpl.getUserRole;
+
+
 @Service
 @RequiredArgsConstructor
 public class SecurityServiceImpl implements SecurityService {
@@ -33,7 +37,7 @@ public class SecurityServiceImpl implements SecurityService {
     private final ApplicationEventPublisher applicationEventPublisher;
 
     @Transactional
-    public String exchangeAuthorizationCode(String code) {
+    public TokenDto exchangeAuthorizationCode(String code) {
 
         var requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
@@ -50,10 +54,11 @@ public class SecurityServiceImpl implements SecurityService {
                 .build();
 
         String token = this.makeHttpCall(request).get("id_token").toString();
+        Claims claims = (getClaims(token));
 
-        applicationEventPublisher.publishEvent(new CreateUserEvent((getClaims(token))));
+        applicationEventPublisher.publishEvent(new CreateUserEvent(claims));
 
-        return token;
+        return TokenDto.builder().token(token).role(getUserRole(claims.get("email").toString())).build();
 
     }
 

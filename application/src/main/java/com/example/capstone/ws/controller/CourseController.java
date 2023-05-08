@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -47,9 +48,14 @@ public class CourseController {
         return ResponseEntity.ok().body(courseService.getCourses(pageable));
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<CourseModel>> getCoursesByUser(@IsAuthenticated @Valid @RequestHeader("Authorization") String token, @PathVariable Long userId) {
+        return ResponseEntity.ok().body(courseService.getCoursesByUser(userId));
+    }
+
     @GetMapping("/{courseId}/attention-average")
-    public ResponseEntity<AverageAttentionDto> getAverageByCourse(@IsAuthenticated @Valid @RequestHeader("Authorization") String token, @PathVariable Long courseId, @RequestParam String  date) {
-        return ResponseEntity.ok().body(attentionService.getAverageByCourseAndDate(courseId, LocalDateTime.parse(date, DateTimeFormatter.ISO_LOCAL_DATE_TIME)));
+    public ResponseEntity<AverageAttentionDto> getAverageByCourse(@IsAuthenticated @Valid @RequestHeader("Authorization") String token, @PathVariable Long courseId, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        return ResponseEntity.ok().body(attentionService.getAverageByCourseAndDate(courseId, date.atStartOfDay()));
     }
 
     @GetMapping("/users/{userId}/cluster/{clusterName}")

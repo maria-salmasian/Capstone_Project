@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private RoleName getUserRole(String email) {
+    public static RoleName getUserRole(String email) {
         if (email.contains("@edu.aua.am"))
             return RoleName.STUDENT;
         else return RoleName.PROFESSOR;

@@ -13,6 +13,7 @@ public interface CourseService {
     CourseModel getCourse(Long id);
 
     List<CourseModel> getCourses(Pageable pageable);
+    List<CourseModel> getCoursesByUser(Long userId);
 
     List<CourseModel> getCoursesByUserAndClusterName(Pageable pageable, Long userId, String clusterName);
 

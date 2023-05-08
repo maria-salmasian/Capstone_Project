@@ -19,5 +19,4 @@ public class UserModel {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Role role;
-    private List<CourseModel> courses;
 }

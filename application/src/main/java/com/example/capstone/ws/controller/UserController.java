@@ -8,15 +8,18 @@ import com.example.capstone.core.service.SecurityService;
 import com.example.capstone.core.service.UserService;
 import com.example.capstone.utils.annotation.IsAuthenticated;
 import com.example.capstone.ws.dto.AverageAttentionDto;
+import com.example.capstone.ws.dto.TokenDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @RestController
@@ -40,14 +43,15 @@ public class UserController {
             @IsAuthenticated @Valid @RequestHeader("Authorization") String token,
             @PathVariable Long userId,
             @PathVariable Long courseId,
-            @RequestParam LocalDateTime date) {
-        return ResponseEntity.ok().body(attentionService.getAverageByUserAndCourseAndDate(userId, courseId, date));
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        return ResponseEntity.ok().body(attentionService.getAverageByUserAndCourseAndDate(userId, courseId, date.atStartOfDay()));
     }
 
     @GetMapping("/login")
-    public String login(
+    public ResponseEntity<TokenDto> login(
             @Valid @NotNull @RequestParam(name = "code") final String code) {
-        return securityService.exchangeAuthorizationCode(code);
+        return ResponseEntity.ok().body(securityService.exchangeAuthorizationCode(code));
+
     }
 
     @GetMapping("/logout")

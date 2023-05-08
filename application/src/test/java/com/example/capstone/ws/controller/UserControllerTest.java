@@ -7,6 +7,7 @@ import com.example.capstone.core.service.AttentionService;
 import com.example.capstone.core.service.SecurityService;
 import com.example.capstone.core.service.UserService;
 import com.example.capstone.ws.dto.AverageAttentionDto;
+import com.example.capstone.ws.dto.TokenDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -93,7 +94,7 @@ class UserControllerTest {
 
     @Test
     void testLogin() throws Exception {
-        when(mockSecurityService.exchangeAuthorizationCode("code")).thenReturn(token);
+        when(mockSecurityService.exchangeAuthorizationCode("code")).thenReturn(TokenDto.builder().token(token).build());
 
         final MockHttpServletResponse response = mockMvc.perform(get("/user/login")
                         .param("code", "code")
@@ -102,7 +103,7 @@ class UserControllerTest {
 
         // Verify the results
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.getContentAsString()).isEqualTo(token);
+        assertThat(response.getContentAsString()).isEqualTo(objectMapper.writeValueAsString(TokenDto.builder().token(token).build()));
     }
 
     @Test

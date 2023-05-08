@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
 @Repository
 public interface AttentionRepository extends JpaRepository<Attention, Long> {
 
-    @Query("select avg(a.angle) from Attention a where a.user.id = :userId and a.course.id = :courseId and a.date = :date")
+    @Query("select avg(a.angle) from Attention a where a.user.id = :userId and a.course.id = :courseId and DATE(a.date) = DATE(:date)")
     Double findAverageAttentionByUserAndCourseAndDate(Long userId, Long courseId, LocalDateTime date);
 
-    @Query("select avg(a.angle) from Attention a where a.course.id = :courseId and a.date = :date")
+    @Query("select avg(a.angle) from Attention a where a.course.id = :courseId and DATE(a.date) = DATE(:date)")
     Double findAverageAttentionByCourseAndDate(Long courseId, LocalDateTime date);
 }

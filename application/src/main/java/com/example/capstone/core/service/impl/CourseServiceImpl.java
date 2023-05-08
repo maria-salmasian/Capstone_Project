@@ -14,9 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -55,6 +53,13 @@ public class CourseServiceImpl implements CourseService {
 
     public List<CourseModel> getCourses(Pageable pageable) {
         return courseRepository.findAllByIsDeletedFalse(pageable)
+                .stream()
+                .map(c -> modelMapper.map(c, CourseModel.class))
+                .toList();
+    }
+
+    public List<CourseModel> getCoursesByUser(Long userId){
+        return courseRepository.findAllByIsDeletedFalseAndUsersIdEquals(userId)
                 .stream()
                 .map(c -> modelMapper.map(c, CourseModel.class))
                 .toList();
