@@ -31,6 +31,9 @@ dependencies {
     implementation 'org.modelmapper:modelmapper:2.4.4'
     implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.2'
     implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
+    // https://mvnrepository.com/artifact/com.google.api-client/google-api-client
+    implementation group: 'com.google.api-client', name: 'google-api-client', version: '2.2.0'
+
 
 
     compileOnly 'org.projectlombok:lombok'
