@@ -1,5 +1,6 @@
 package com.example.capstone.core.service.impl;
 
+import com.example.capstone.core.model.CourseModel;
 import com.example.capstone.core.model.UserCourseModel;
 import com.example.capstone.core.model.UserModel;
 import com.example.capstone.core.model.event.CreateUserEvent;
@@ -21,7 +22,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+import java.awt.print.Pageable;
 import java.time.LocalDateTime;
+import java.util.List;
+
+import static com.example.capstone.core.service.impl.SecurityServiceImpl.getClaims;
 
 @Service
 @RequiredArgsConstructor
@@ -45,10 +50,27 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(Long userId) {
         final User user = userRepository.findById(userId).orElseThrow(
-                () -> new NotFoundException(String.format("User with id %s not found",userId)));
+                () -> new NotFoundException(String.format("User with id %s not found", userId)));
         user.setDeleted(true);
         userRepository.save(user);
     }
+
+    @Override
+    public UserModel getUser(String token) {
+        final Claims claims = (getClaims(token));
+        final String email = claims.get("email").toString();
+
+        final User user = userRepository.findUserByUsername(email).orElseThrow(
+                () -> new NotFoundException(String.format("User with username %s not found", email)));
+        return modelMapper.map(user, UserModel.class);
+    }
+
+    @Override
+    public List<UserModel> getUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(c -> modelMapper.map(c, UserModel.class))
+                .toList();    }
 
     @Async
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -68,7 +90,7 @@ public class UserServiceImpl implements UserService {
                         .deleted(false)
                         .build());
         if (user.isDeleted())
-            throw new  ValidationException(String.format("User with email %s is deleted",email));
+            throw new ValidationException(String.format("User with email %s is deleted", email));
         if (user.getId() == null) {
             userRepository.save(user);
         }

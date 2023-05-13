@@ -45,7 +45,7 @@ public class SecurityServiceImpl implements SecurityService {
                 .addFormDataPart("client_secret", clientConfig.getClientSecret())
                 .addFormDataPart("code", code)
                 .addFormDataPart("grant_type", "authorization_code")
-                .addFormDataPart("redirect_uri", "http://localhost:3000/login")
+                .addFormDataPart("redirect_uri", "http://localhost:8080/user/login")
                 .build();
 
         var request = new Request.Builder()

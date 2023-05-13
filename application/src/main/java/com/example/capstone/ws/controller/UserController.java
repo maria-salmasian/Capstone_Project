@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @Validated
@@ -36,6 +36,16 @@ public class UserController {
     @PostMapping("/courses")
     public ResponseEntity<UserModel> addCourseToUser(@IsAuthenticated @Valid @RequestHeader("Authorization") String token, @RequestBody UserCourseModel userCourseModel) {
         return ResponseEntity.ok().body(userService.addCourseToUser(userCourseModel));
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<UserModel> getUser(@IsAuthenticated @Valid @RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok().body(userService.getUser(token));
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<UserModel>> getUsers(@IsAuthenticated @Valid @RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok().body(userService.getUsers());
     }
 
     @GetMapping("{userId}/courses/{courseId}/attention-average")
