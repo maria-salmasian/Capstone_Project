@@ -1,6 +1,7 @@
 package com.example.capstone.ws.exception;
 
 import com.example.capstone.core.service.exception.NotFoundException;
+import com.example.capstone.core.service.exception.ReportNotFound;
 import com.example.capstone.core.service.exception.ResourceAlreadyExistsException;
 import com.example.capstone.core.service.exception.ValidationException;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> globalExceptionHandler(Exception e, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(new Date(), e.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(ReportNotFound.class)
+    public ResponseEntity<?> NotFoundException(ReportNotFound e, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), e.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_ACCEPTABLE);
     }
 
 }
