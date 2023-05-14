@@ -24,7 +24,7 @@ public class AttentionServiceImpl implements AttentionService {
 
         return AverageAttentionDto.builder()
                 .identifier(
-                        String.format("Average attention of user with id: %s for the course with id: %s, date: %s",
+                        String.format("Average attention of user for the course on date: %s",
                                 userId, courseId, formattedDate))
                 .percentage(avgAttention)
                 .build();
@@ -37,7 +37,7 @@ public class AttentionServiceImpl implements AttentionService {
         final String formattedDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH"));
 
         return AverageAttentionDto.builder()
-                .identifier(String.format("Average attention for the course with id: %s, date: %s", courseId, formattedDate))
+                .identifier(String.format("Average attention for the course on date: %s", courseId, formattedDate))
                 .percentage(avgAttention)
                 .build();
     }
