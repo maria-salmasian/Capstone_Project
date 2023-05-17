@@ -1,7 +1,6 @@
 from datetime import datetime
 
 import cv2
-import matplotlib.pyplot as plt
 import psycopg2
 from flask import Flask, jsonify
 
@@ -65,7 +64,7 @@ def face_detection(userId, courseId):
             # Check if the face is not straight
             if percent_not_straight > 10.0:
                 # Insert the percentage into the database
-                cur.execute("INSERT INTO face_recognition.attention (date, user_id, angle, course_id) VALUES (%s, %s, %s, %s)", (
+                cur.execute("INSERT INTO face_recognition.attention(date, user_id, percent, course_id) VALUES (%s, %s, %s, %s)", (
                     datetime.now(), userId, float(percent_not_straight), courseId))
                 conn.commit()
 
@@ -83,5 +82,5 @@ def face_detection(userId, courseId):
 
 # Run the Flask app
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001)
+    app.run(host='0.0.0.0', port=5000)
 
