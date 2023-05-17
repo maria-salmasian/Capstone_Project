@@ -21,8 +21,8 @@ public class Attention {
     @ManyToOne
     private User user;
 
-    @Column(name = "angle")
-    private float angle;
+    @Column(name = "percent")
+    private float percent;
 
     @ManyToOne
     private Course course;

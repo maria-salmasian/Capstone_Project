@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -29,8 +30,11 @@ class AttentionServiceImplTest {
 
     @Test
     void testGetAverageByUserAndCourseAndDate() {
+        final String formattedDate = LocalDateTime.of(2020, 1, 1, 0, 0, 0).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         final AverageAttentionDto expectedResult = AverageAttentionDto.builder()
-                .identifier("Average attention of user with id: 0 for the course with id: 0, date: 2020-01-01 00")
+                .identifier(
+                        String.format("Average attention of user for the course on date: %s",
+                                formattedDate))
                 .percentage(0.0)
                 .build();
         when(mockAttentionRepository.findAverageAttentionByUserAndCourseAndDate(0L, 0L,
@@ -44,8 +48,9 @@ class AttentionServiceImplTest {
 
     @Test
     void testGetAverageByCourseAndDate() {
+        final String formattedDate = LocalDateTime.of(2020, 1, 1, 0, 0, 0).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         final AverageAttentionDto expectedResult = AverageAttentionDto.builder()
-                .identifier("Average attention for the course with id: 0, date: 2020-01-01 00")
+                .identifier(String.format("Average attention for the course on date: %s", formattedDate))
                 .percentage(0.0)
                 .build();
         when(mockAttentionRepository.findAverageAttentionByCourseAndDate(0L,

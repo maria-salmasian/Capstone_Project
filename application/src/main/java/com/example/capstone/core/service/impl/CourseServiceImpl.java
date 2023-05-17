@@ -14,7 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
@@ -48,17 +50,28 @@ public class CourseServiceImpl implements CourseService {
     public CourseModel getCourse(Long id) {
         final Course course = courseRepository.findByIdAndIsDeletedFalse(id).orElseThrow(
                 () -> new NotFoundException(String.format("Course with id %s not found", id)));
-        return modelMapper.map(course, CourseModel.class);
+        CourseModel courseModel = modelMapper.map(course, CourseModel.class);
+        if (courseModel.getUsers() != null)
+            courseModel.getUsers().removeIf(userModel -> userModel.getRole().getId() == 2);
+
+        return courseModel;
+
     }
 
     public List<CourseModel> getCourses(Pageable pageable) {
-        return courseRepository.findAllByIsDeletedFalse(pageable)
+        List<CourseModel> courseModels = courseRepository.findAllByIsDeletedFalse(pageable)
                 .stream()
                 .map(c -> modelMapper.map(c, CourseModel.class))
                 .toList();
+        courseModels.forEach(courseModel -> {
+            if (courseModel.getUsers() != null)
+                courseModel.getUsers().removeIf(userModel -> userModel.getRole().getId() == 2);
+
+        });
+        return courseModels;
     }
 
-    public List<CourseModel> getCoursesByUser(Long userId){
+    public List<CourseModel> getCoursesByUser(Long userId) {
         return courseRepository.findAllByIsDeletedFalseAndUsersIdEquals(userId)
                 .stream()
                 .map(c -> modelMapper.map(c, CourseModel.class))
@@ -66,8 +79,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
 
-    public List<CourseModel> getCoursesByUserAndClusterName(Pageable pageable, Long userId, String clusterName){
-        return courseRepository.findCourseByUsersIdEqualsAndClustersNameLike(pageable, userId, clusterName+'%')
+    public List<CourseModel> getCoursesByUserAndClusterName(Pageable pageable, Long userId, String clusterName) {
+        return courseRepository.findCourseByUsersIdEqualsAndClustersNameLike(pageable, userId, clusterName + '%')
                 .stream()
                 .map(c -> modelMapper.map(c, CourseModel.class))
                 .toList();

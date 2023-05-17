@@ -12,6 +12,6 @@ public class AttentionModel {
     private Long id;
     private LocalDateTime date;
     private UserModel user;
-    private float angle;
+    private float percent;
 }
 

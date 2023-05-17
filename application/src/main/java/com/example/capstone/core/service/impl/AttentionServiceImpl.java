@@ -22,7 +22,7 @@ public class AttentionServiceImpl implements AttentionService {
     @Transactional
     public AverageAttentionDto getAverageByUserAndCourseAndDate(Long userId, Long courseId, LocalDateTime date) {
         final Double avgAttention = attentionRepository.findAverageAttentionByUserAndCourseAndDate(userId, courseId, date);
-        final String formattedDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH"));
+        final String formattedDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         if (avgAttention == null)
             throw new ReportNotFound(String.format("no available report for given date"));
@@ -30,7 +30,7 @@ public class AttentionServiceImpl implements AttentionService {
         return AverageAttentionDto.builder()
                 .identifier(
                         String.format("Average attention of user for the course on date: %s",
-                                userId, courseId, formattedDate))
+                                formattedDate))
                 .percentage(avgAttention)
                 .build();
     }
@@ -39,12 +39,12 @@ public class AttentionServiceImpl implements AttentionService {
     @Transactional
     public AverageAttentionDto getAverageByCourseAndDate(Long courseId, LocalDateTime date) {
         final Double avgAttention = attentionRepository.findAverageAttentionByCourseAndDate(courseId, date);
-        final String formattedDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH"));
+        final String formattedDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         if (avgAttention == null)
             throw new ReportNotFound(String.format("no available report for given date"));
         return AverageAttentionDto.builder()
-                .identifier(String.format("Average attention for the course on date: %s", courseId, formattedDate))
+                .identifier(String.format("Average attention for the course on date: %s", formattedDate))
                 .percentage(avgAttention)
                 .build();
     }
