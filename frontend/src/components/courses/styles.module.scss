@@ -1,0 +1,19 @@
+.root {
+  @apply grid grid-cols-4 gap-8;
+
+  .course {
+    @apply border-2 border-primary rounded-lg p-4 shadow flex flex-col gap-y-4;
+
+    .title {
+      @apply text-lg text-primary font-medium;
+    }
+
+    .description {
+      @apply text-primary;
+    }
+
+    button {
+      @apply py-2 px-4 bg-primary rounded-lg text-white text-sm;
+    }
+  }
+}

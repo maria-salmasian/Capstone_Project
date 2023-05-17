@@ -1,0 +1,39 @@
+.content {
+  @apply p-8 max-w-full flex flex-col gap-8;
+
+  .header {
+    @apply flex justify-between gap-x-16 text-primary items-center;
+
+    .left {
+      @apply flex gap-x-8 items-center;
+
+      .title {
+        @apply text-lg font-medium;
+      }
+    }
+
+    .report {
+      @apply bg-primary px-4 py-2 rounded-md text-white;
+    }
+  }
+
+  .users {
+    @apply flex flex-col w-3/4 mx-auto;
+
+    > span {
+      @apply text-sm font-medium text-primary;
+    }
+
+    .users-list {
+      @apply flex flex-col gap-y-2;
+
+      .user {
+        @apply grid grid-cols-7 gap-x-4 items-center;
+
+        > .report {
+          @apply col-start-6 col-span-2 bg-primary p-1 rounded-md text-white;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+.overlay {
+  @apply fixed inset-0 p-16 flex items-center justify-center bg-black bg-opacity-70;
+
+  .content {
+    @apply bg-white shadow rounded-lg p-4 flex flex-col gap-y-2 text-primary;
+
+    .close {
+      @apply flex justify-end;
+
+      > button {
+        @apply h-6 w-6;
+      }
+    }
+  }
+}
