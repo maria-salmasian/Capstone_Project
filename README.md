@@ -5,8 +5,8 @@ A Student Attention Tracking System is designed for measuring the attentiveness 
 It consists of a backend API, front end and a machine learning model.
                          
 - endpoint for backend: http://localhost:8080/                
-- endpoint for frontend: ?    
-- endpoint for Flask: http://localhost:5001/ 
+- endpoint for frontend: http://localhost:3000/  
+- endpoint for Flask: http://localhost:5000/ 
                          
 # Prerequisites                         
 JDK 17                        
