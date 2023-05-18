@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -31,8 +32,23 @@ public class AttentionServiceImpl implements AttentionService {
                 .identifier(
                         String.format("Average attention of user for the course on date: %s",
                                 formattedDate))
-                .percentage(avgAttention)
+                .percentage(avgAttention.longValue())
                 .build();
+    }
+
+
+    @Override
+    @Transactional
+    public List<Double> getAverageByUserAndCourseAndDateINTERVAL(Long userId, Long courseId, LocalDateTime startDate, LocalDateTime endDate) {
+        final List<Double> avgAttention = attentionRepository.findAverageAttentionByUserAndCourseAndDateIn(userId, courseId, startDate, endDate);
+        final String formattedStartDate = startDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        final String formattedEndDate = endDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+
+        if (avgAttention == null)
+            throw new ReportNotFound(String.format("no available report for given date"));
+
+        return avgAttention;
     }
 
     @Override
@@ -45,7 +61,7 @@ public class AttentionServiceImpl implements AttentionService {
             throw new ReportNotFound(String.format("no available report for given date"));
         return AverageAttentionDto.builder()
                 .identifier(String.format("Average attention for the course on date: %s", formattedDate))
-                .percentage(avgAttention)
+                .percentage(avgAttention.longValue())
                 .build();
     }
 }

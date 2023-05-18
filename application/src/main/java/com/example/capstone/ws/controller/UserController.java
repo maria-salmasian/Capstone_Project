@@ -57,6 +57,13 @@ public class UserController {
         return ResponseEntity.ok().body(attentionService.getAverageByUserAndCourseAndDate(userId, courseId, date.atStartOfDay()));
     }
 
+
+    @GetMapping("/{userId}/courses/{courseId}/attention-average-by-interval")
+    public ResponseEntity<List<Double>> getAverageByCourseDateInterval(@IsAuthenticated @Valid @RequestHeader("Authorization") String token, @PathVariable Long userId, @PathVariable Long courseId, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        return ResponseEntity.ok().body(attentionService.getAverageByUserAndCourseAndDateINTERVAL(userId, courseId, startDate.atStartOfDay(), endDate.atStartOfDay()));
+    }
+
+
     @GetMapping("/login")
     public ResponseEntity<TokenDto> login(
             @Valid @NotNull @RequestParam(name = "code") final String code) {

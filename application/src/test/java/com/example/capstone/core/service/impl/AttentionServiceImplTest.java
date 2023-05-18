@@ -35,7 +35,7 @@ class AttentionServiceImplTest {
                 .identifier(
                         String.format("Average attention of user for the course on date: %s",
                                 formattedDate))
-                .percentage(0.0)
+                .percentage((long) 0.0)
                 .build();
         when(mockAttentionRepository.findAverageAttentionByUserAndCourseAndDate(0L, 0L,
                 LocalDateTime.of(2020, 1, 1, 0, 0, 0))).thenReturn(0.0);
@@ -51,7 +51,7 @@ class AttentionServiceImplTest {
         final String formattedDate = LocalDateTime.of(2020, 1, 1, 0, 0, 0).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         final AverageAttentionDto expectedResult = AverageAttentionDto.builder()
                 .identifier(String.format("Average attention for the course on date: %s", formattedDate))
-                .percentage(0.0)
+                .percentage((long) 0.0)
                 .build();
         when(mockAttentionRepository.findAverageAttentionByCourseAndDate(0L,
                 LocalDateTime.of(2020, 1, 1, 0, 0, 0))).thenReturn(0.0);
