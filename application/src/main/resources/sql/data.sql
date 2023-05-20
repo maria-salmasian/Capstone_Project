@@ -25,4 +25,4 @@ insert into face_recognition.link_user_course(user_id, course_id)
 values (1, 3), (1,2), (1,1);
 
 insert into face_recognition.link_user_course(user_id, course_id)
-values (3, 1), (3,4);
+values (5, 1), (5,4);
